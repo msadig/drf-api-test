@@ -1,0 +1,9 @@
+*.pyc
+*.log
+*.pyc
+*.zip
+
+venv/
+.venv/
+_data/
+app/static/
