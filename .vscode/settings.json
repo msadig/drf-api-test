@@ -3,5 +3,8 @@
     "python.envFile": "${workspaceFolder}/.env",
     "python.venvFolders": [
         ".venv"
-    ]
+    ],
+    "python.analysis.extraPaths": [
+        "./app"
+    ],
 }

@@ -8,6 +8,7 @@
             "name": "Python: Django",
             "type": "python",
             "request": "launch",
+            "cwd": "${workspaceFolder}/app",
             "program": "${workspaceFolder}/app/manage.py",
             "envFile": "${workspaceFolder}/.env",
             "env": {

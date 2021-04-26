@@ -21,14 +21,7 @@ class Pizza(models.Model):
 
 class Customer(models.Model):
     # information
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.DO_NOTHING,
-        blank=True, null=True,
-        help_text=_(
-            'Store user reference if order placed by an authenticated user')
-    )
-    name = models.CharField(max_length=128)
+    full_name = models.CharField(max_length=128)
     email = models.EmailField()
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -38,7 +31,7 @@ class Customer(models.Model):
         ordering = ("-created_at", )
 
     def __str__(self) -> str:
-        return str(self.name)
+        return str(self.full_name)
 
 
 class Order(models.Model):
