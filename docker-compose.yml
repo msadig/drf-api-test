@@ -27,6 +27,7 @@ services:
       - HTTP_PORT=8015
       - STATS_PORT=8001
       - DEBUG=True
+      - POSTGRES_HOST=postgres
     volumes:
       - ${PWD}/app:/app
     ports:
