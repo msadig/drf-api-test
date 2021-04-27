@@ -49,7 +49,7 @@ services:
     <<: *api
     container_name: drf-test
     restart: "no"
-    command: /bin/sh -c "echo 'Waiting db connection...'; while ! pg_isready -h postgres -p 5432 -U postgres; do sleep 1; done; python manage.py test"
+    command: /bin/sh -c "echo 'Waiting db connection...'; while ! pg_isready -h postgres -p 5432 -U postgres; do sleep 1; done; coverage run --source='.' manage.py test; coverage report"
     ports:
       - "8015"
   

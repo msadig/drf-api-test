@@ -91,6 +91,8 @@ Now, you can access the application from your browser in the addresses listed be
 
 ## Testing
 
+![DRF-API](coverage.png)
+
 To run tests: 
 
 ```bash
