@@ -113,3 +113,36 @@ class OrderViewSetTestCase(APITestCase):
         serializer = OrderSerializerBase(instance)
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_orders_update(self):
+        pk = self.orders[0].id
+        update_url = reverse('order:order-detail', args=[pk, ])
+        update_order_params = {
+            "status": Order.DeliveryStatuses.ACCEPTED.value
+        }
+        response = self.client.patch(
+            update_url,
+            data=update_order_params,
+            format='json'
+        )
+
+        self.assertEqual(response.data.get("status"),
+                         Order.DeliveryStatuses.ACCEPTED.value)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_orders_update_status(self):
+        instance = self.orders[-1]
+        instance.status = Order.DeliveryStatuses.DELIVERED
+        instance.save(update_fields=['status'])
+
+        update_url = reverse('order:order-detail', args=[instance.id, ])
+        update_order_params = {
+            "status": Order.DeliveryStatuses.ACCEPTED.value
+        }
+        response = self.client.patch(
+            update_url,
+            data=update_order_params,
+            format='json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_406_NOT_ACCEPTABLE)
