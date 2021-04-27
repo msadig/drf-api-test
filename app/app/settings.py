@@ -158,3 +158,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20
 }
+
+# Django REST Framework Extensions
+# http://chibisov.github.io/drf-extensions/docs/#settings
+
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_PARENT_LOOKUP_KWARG_NAME_PREFIX': '',
+}

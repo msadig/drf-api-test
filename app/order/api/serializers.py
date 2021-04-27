@@ -2,7 +2,7 @@ from itertools import groupby
 
 from rest_framework import serializers
 
-from .models import Order, Customer, OrderItem, Pizza
+from order.models import Order, Customer, OrderItem, Pizza
 
 
 class PizzaSerializer(serializers.ModelSerializer):
@@ -11,13 +11,7 @@ class PizzaSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "created_at",
-            "updated_at",
         ]
-        extra_kwargs = {
-            'created_at': {'read_only': True},
-            'updated_at': {'read_only': True},
-        }
 
 
 class OrderItemSerializerBase(serializers.ModelSerializer):
@@ -27,6 +21,7 @@ class OrderItemSerializerBase(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = [
+            "id",
             "pizza",
             "size",
             "count",
@@ -65,15 +60,16 @@ class OrderSerializerBase(serializers.ModelSerializer):
         """Group items by size to calculate the quantity
         """
         for size, items in groupby(validated_data, key=lambda x: x['size']):
-            grouped_item = list(items)
-            qty = sum(i['count'] for i in grouped_item)
-            item_serializer = OrderItemSerializerBase(data={
-                "pizza": grouped_item[0]['pizza'].pk,
-                "count": qty,
-                "size": size,
-            })
-            item_serializer.is_valid(raise_exception=True)
-            item_serializer.save(order_id=order_instance.pk)
+            for pizza, order_items in groupby(items, key=lambda x: x['pizza']):
+                grouped_item = list(order_items)
+                qty = sum(i['count'] for i in grouped_item)
+                item_serializer = OrderItemSerializerBase(data={
+                    "pizza": pizza.pk,
+                    "count": qty,
+                    "size": size,
+                })
+                item_serializer.is_valid(raise_exception=True)
+                item_serializer.save(order_id=order_instance.pk)
 
     def create(self, validated_data):
         customer = validated_data.pop('customer')
@@ -93,3 +89,35 @@ class OrderItemReadSerializer(OrderItemSerializerBase):
 class OrderReadSerializer(OrderSerializerBase):
     items = OrderItemReadSerializer(many=True, source='orderitem_set')
 
+
+class OrderUpdateSerializer(OrderSerializerBase):
+
+    class Meta(OrderSerializerBase.Meta):
+        extra_kwargs = {
+            'created_at': {'read_only': True},
+            'updated_at': {'read_only': True},
+            'customer': {'read_only': True},
+            'items': {'read_only': True},
+        }
+
+    def update_customer(self, instance, validated_data):
+        """
+        In documentation didn't specify to update the order's customer info, 
+        so this function sits here in case of a feature request
+        """
+        serializer = CustomerSerializer(instance=instance, data=validated_data)
+        serializer.is_valid(raise_exception=True)
+        return serializer.save()
+
+    def update(self, instance, validated_data, **kwargs):
+        if validated_data.get('customer'):
+            validated_data.pop('customer')
+            # self.update_customer(
+            #     instance=instance.customer,
+            #     validated_data=validated_data.pop('customer'),
+            # )
+
+        if validated_data.get('orderitem_set'):
+            validated_data.pop('orderitem_set')
+
+        return super().update(instance, validated_data)

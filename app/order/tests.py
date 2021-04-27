@@ -5,7 +5,7 @@ from rest_framework import serializers, status
 from rest_framework.test import APITestCase
 
 from .models import Pizza, Order, OrderItem, Customer
-from .serializers import PizzaSerializer, OrderSerializerBase, OrderReadSerializer
+from .api.serializers import PizzaSerializer, OrderSerializerBase, OrderReadSerializer
 # Create your tests here.
 
 FLAVORS = ("margarita", "marinara", "salami")

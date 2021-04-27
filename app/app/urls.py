@@ -20,7 +20,7 @@ from drf_yasg import openapi
 
 api_urlpatterns = [
     path('api/v1/', include([
-        path('', include(('order.urls', 'order'), namespace='order')),
+        path('', include(('order.api.urls', 'order'), namespace='order')),
     ])),
 ]
 

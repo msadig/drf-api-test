@@ -42,6 +42,10 @@ class Order(models.Model):
         SHIPPED = 'SHIPPED', _('Order on its way to customer')
         DELIVERED = 'DELIVERED', _('Delivered')
 
+    UNEDITABLE_STATUES = [
+        DeliveryStatuses.DELIVERED,
+    ]
+
     # relations
     customer = models.ForeignKey(
         'Customer', on_delete=models.CASCADE, related_name='orders')
