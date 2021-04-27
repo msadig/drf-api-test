@@ -38,6 +38,7 @@ services:
   
   setup:
     <<: *api
+    restart: "no"
     container_name: drf-setup
     command: /bin/sh -c "echo 'Waiting db connection...'; while ! pg_isready -h postgres -p 5432 -U postgres; do sleep 1; done; python manage.py migrate --noinput; python manage.py migrate --noinput; python manage.py collectstatic --noinput; python manage.py loaddata order/fixtures/pizzas.json; python manage.py loaddata order/fixtures/users.json"
     ports:
@@ -46,7 +47,8 @@ services:
   
   test:
     <<: *api
-    container_name: drf-setup
+    container_name: drf-test
+    restart: "no"
     command: /bin/sh -c "echo 'Waiting db connection...'; while ! pg_isready -h postgres -p 5432 -U postgres; do sleep 1; done; python manage.py test"
     ports:
       - "8015"

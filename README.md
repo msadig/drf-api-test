@@ -50,21 +50,22 @@ This service assumes you know the libraries/tools listed below, and you've alrea
 ---
 ## Installation
 
+To run this service locally, please use commands listed below.
+
+
 Clone code to the local machine:
 
 ```bash
 $ git clone git@github.com:msadig/drf-api-test.git
 ```
 
-To run this service locally, please use commands listed below.
-
-Build the Docker image:
+Build the Docker images:
 
 ```bash
 $ docker-compose build
 ```
 
-Setup the project (runs migration, collects static files, and loads initial data):
+Setup the project (runs migrations, collects static files, and loads initial data):
 
 ```bash
 $  docker-compose run --rm setup 
@@ -73,7 +74,7 @@ $  docker-compose run --rm setup
 Run the service:
 
 ```bash
-$  docker-compose up -d
+$  docker-compose up -d api
 ```
 
 Now, you can access the application from your browser in the addresses listed below:
