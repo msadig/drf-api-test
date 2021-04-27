@@ -1,0 +1,20 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$63NAzfH6wndrftQJdfaDqV$gAEeufilaYfc0FzBYur4CfGHolL6hU4OP/dTO90Z1IQ=",
+            "last_login": "2021-04-27T13:58:22Z",
+            "is_superuser": true,
+            "username": "mail@muradovs.com",
+            "first_name": "",
+            "last_name": "",
+            "email": "mail@muradovs.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2021-04-27T07:49:08Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]

@@ -10,7 +10,17 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(models.Pizza)
 class PizzaAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = [
+        'created_at',
+        'updated_at',
+    ]
+
+@admin.register(models.Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    readonly_fields = [
+        'created_at',
+        'updated_at',
+    ]
 
 # Register your models here.
 

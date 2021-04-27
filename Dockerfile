@@ -20,6 +20,7 @@ RUN apt-get update \
     libc-dev \
     bash \
     git \
+    postgresql-client \
     && pip3 install --upgrade pip \
     && pip3 --no-cache-dir install -r requirements.txt
 
