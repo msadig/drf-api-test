@@ -5,7 +5,7 @@ from rest_framework import serializers, status
 from rest_framework.test import APITestCase
 
 from .models import Pizza, Order, OrderItem, Customer
-from .api.serializers import PizzaSerializer, OrderSerializerBase, OrderReadSerializer
+from .api.serializers import PizzaSerializer, OrderSerializerBase, OrderReadSerializer, OrderItemReadSerializer
 # Create your tests here.
 
 FLAVORS = ("margarita", "marinara", "salami")
@@ -130,7 +130,7 @@ class OrderViewSetTestCase(APITestCase):
                          Order.DeliveryStatuses.ACCEPTED.value)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_orders_update_status(self):
+    def test_orders_not_update(self):
         instance = self.orders[-1]
         instance.status = Order.DeliveryStatuses.DELIVERED
         instance.save(update_fields=['status'])
@@ -141,6 +141,86 @@ class OrderViewSetTestCase(APITestCase):
         }
         response = self.client.patch(
             update_url,
+            data=update_order_params,
+            format='json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_406_NOT_ACCEPTABLE)
+
+class OrderItemViewSetTestCase(APITestCase):
+
+    def setUp(self) -> None:
+        self.pizzas = [
+            Pizza.objects.create(
+                name=flavor
+            ) for flavor in FLAVORS
+        ]
+        self.orders = self.setup_dummy_orders()
+
+    def setup_dummy_orders(self):
+        orders = []
+        for n in range(1, 5):
+            customer = Customer.objects.create(
+                full_name=f"John #{n}", email=f"john_{n}@example.com")
+            order = Order.objects.create(customer=customer)
+            for pizza in self.pizzas:
+                OrderItem.objects.create(**{
+                    "order": order,
+                    "pizza": pizza,
+                    "size": random.choice([x.value for x in OrderItem.Sizes]),
+                    "count": random.randint(1, 5)
+                })
+            orders.append(order)
+
+        return orders
+
+    def test_order_items_list(self):
+        instance = self.orders[1]
+        order_items_list_url = reverse('order:order-items-list', kwargs={"order_id": instance.id})
+        response = self.client.get(order_items_list_url)
+
+        queryset = instance.orderitem_set.all()
+        serializer = OrderItemReadSerializer(queryset, many=True)
+
+        self.assertEqual(response.data.get('count'), len(queryset))
+        self.assertEqual(response.data.get('results'), serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_order_items_update(self):
+        order = self.orders[1]
+        item = order.orderitem_set.first()
+
+        order_items_update_url = reverse('order:order-items-detail', kwargs={
+            "order_id": order.id,
+            "pk": item.id,
+        })
+        update_order_params = {
+            "count": 77
+        }
+        response = self.client.patch(
+            order_items_update_url,
+            data=update_order_params,
+            format='json'
+        )
+
+        self.assertEqual(response.data.get('count'), 77)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_order_items_not_update(self):
+        order = self.orders[-1]
+        order.status = Order.DeliveryStatuses.DELIVERED
+        order.save(update_fields=['status'])
+        item = order.orderitem_set.first()
+
+        order_items_update_url = reverse('order:order-items-detail', kwargs={
+            "order_id": order.id,
+            "pk": item.id,
+        })
+        update_order_params = {
+            "count": 77
+        }
+        response = self.client.patch(
+            order_items_update_url,
             data=update_order_params,
             format='json'
         )

@@ -15,11 +15,9 @@ Including another URLconf
 """
 from rest_framework_extensions.routers import ExtendedSimpleRouter
 
-# from rest_framework import routers
-# from rest_framework_nested import routers
 from .viewsets import OrderViewSet, PizzaViewSet, OrderItemViewSet
 
-# router = routers.SimpleRouter()
+
 router = ExtendedSimpleRouter()
 (
     router.register(r'orders', OrderViewSet, basename='order')
@@ -29,13 +27,6 @@ router = ExtendedSimpleRouter()
               parents_query_lookups=['order_id'])
 )
 router.register(r'pizzas', PizzaViewSet, basename='pizza')
-
-# nested_router = routers.NestedSimpleRouter(router, r'orders', lookup='order')
-# nested_router.register(
-#     r'items',
-#     OrderItemViewSet,
-#     basename='order-items'
-# )
 
 
 urlpatterns = [
