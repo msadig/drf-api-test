@@ -96,6 +96,13 @@ DATABASES = {
         ),
         "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        'TEST': {
+            'NAME': 'test',
+            'USER': 'test',
+            'PASSWORD': 'test',
+            'HOST': os.environ.get("POSTGRES_HOST", "localhost"),
+            'PORT': os.environ.get("POSTGRES_PORT", "5432"),
+        },
     },
 }
 

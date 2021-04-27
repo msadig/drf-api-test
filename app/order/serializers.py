@@ -52,6 +52,7 @@ class OrderSerializerBase(serializers.ModelSerializer):
         extra_kwargs = {
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
+            'status': {'read_only': True},
         }
 
     def create_customer(self, validated_data):
@@ -88,10 +89,7 @@ class OrderSerializerBase(serializers.ModelSerializer):
 class OrderItemReadSerializer(OrderItemSerializerBase):
     pizza = PizzaSerializer(read_only=True)
 
-    class Meta(OrderItemSerializerBase.Meta):
-        pass
-
 
 class OrderReadSerializer(OrderSerializerBase):
     items = OrderItemReadSerializer(many=True, source='orderitem_set')
-    pass
+

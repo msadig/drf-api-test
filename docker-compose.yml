@@ -12,6 +12,7 @@ services:
       - 5432:5432
     volumes:
       - ${PWD}/_data/postgres:/var/lib/postgresql/data
+      - ${PWD}/.conf/postgre_test_db.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
     environment:
       - LC_ALL=C.UTF-8
 

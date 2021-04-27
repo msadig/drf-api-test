@@ -9,7 +9,7 @@ from .serializers import (
 from .mixins import MultiSerializerViewSetMixin
 
 
-class OrderViewset(MultiSerializerViewSetMixin, ModelViewSet):
+class OrderViewSet(MultiSerializerViewSetMixin, ModelViewSet):
     model = Order
     queryset = Order.objects.all()
     serializer_classes = {
@@ -19,7 +19,7 @@ class OrderViewset(MultiSerializerViewSetMixin, ModelViewSet):
     }
 
 
-class PizzaViewset(ReadOnlyModelViewSet):
+class PizzaViewSet(ReadOnlyModelViewSet):
     model = Pizza
     queryset = Pizza.objects.all()
     serializer_class = PizzaSerializer
