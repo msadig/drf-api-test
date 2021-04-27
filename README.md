@@ -12,7 +12,7 @@ Table of Contents :
 
 ## Intro
 
-Simplified pizza ordering services with following functionality:
+Simplified pizza ordering service with the following functionality:
 
 * **Order pizzas:**
     * It's possible to create an order with different pizza flavors, sizes, and quantity
